@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -47,7 +49,7 @@ const categoryTranslations: Record<string, string> = {
   "Fruit, fruit preparations and nuts": "Fruits, préparations de fruits et noix",
   "Vegetables and vegetable preparations": "Légumes et préparations de légumes",
   "Dairy products and eggs": "Produits laitiers et œufs",
-  Meat: "Viande",
+  "Meat": "Viande",
   "Fish and seafood": "Poisson et fruits de mer",
   "Non-alcoholic beverages and other food products":
     "Boissons non alcoolisées et autres produits alimentaires",

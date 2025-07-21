@@ -10,6 +10,8 @@ import PieChartSelector from "../components/PieChartSelector";
 
 type CsvRow = {
   REF_DATE?: string;
+  GEO?: string;
+  Statistic?: string;
   "Food expenditures, summary-level categories"?: string;
   VALUE?: string;
 };
@@ -30,7 +32,7 @@ export default function DashboardPage() {
     fetch("/detailed_food_spending_canada.csv")
       .then((res) => res.text())
       .then((csvText) => {
-        const parsed = Papa.parse(csvText, { header: true });
+        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
         const data = parsed.data as CsvRow[];
 
         const mapped = data
@@ -38,7 +40,9 @@ export default function DashboardPage() {
             (row): row is Required<CsvRow> =>
               !!row.REF_DATE &&
               !!row["Food expenditures, summary-level categories"] &&
-              !!row.VALUE
+              !!row.VALUE &&
+              row.GEO === "Canada" &&
+              row.Statistic === "Average expenditure per household"
           )
           .map((row) => ({
             REF_DATE: row.REF_DATE,

@@ -8,6 +8,12 @@ import MyNavbar from "../components/Navbar";
 import LineChartSelector from "../components/LineChartSelector";
 import PieChartSelector from "../components/PieChartSelector";
 
+type CsvRow = {
+  REF_DATE?: string;
+  "Food expenditures, summary-level categories"?: string;
+  VALUE?: string;
+};
+
 type RawDataEntry = {
   REF_DATE: string;
   category: string;
@@ -25,14 +31,14 @@ export default function DashboardPage() {
       .then((res) => res.text())
       .then((csvText) => {
         const parsed = Papa.parse(csvText, { header: true });
-        const data = parsed.data as any[];
+        const data = parsed.data as CsvRow[];
 
         const mapped = data
           .filter(
-            (row) =>
-              row.REF_DATE &&
-              row["Food expenditures, summary-level categories"] &&
-              row.VALUE !== undefined
+            (row): row is Required<CsvRow> =>
+              !!row.REF_DATE &&
+              !!row["Food expenditures, summary-level categories"] &&
+              !!row.VALUE
           )
           .map((row) => ({
             REF_DATE: row.REF_DATE,
@@ -84,9 +90,9 @@ export default function DashboardPage() {
       lineChartTitle: "Dépenses au fil des années",
       categoryLabel: "Sélectionnez la catégorie",
       pieChartTitle: "Répartition des dépenses par catégorie",
-      yearLabel: "Sélectionnez l&apos;année",
+      yearLabel: "Sélectionnez l'année",
       siteDescription:
-        "Ce tableau de bord interactif présente les données sur les dépenses alimentaires des ménages canadiens, vous permettant d&apos;explorer les tendances de dépenses au fil du temps et de comparer les dépenses entre catégories. Toutes les valeurs sont en dollars canadiens (CAD).",
+        "Ce tableau de bord interactif présente les données sur les dépenses alimentaires des ménages canadiens, vous permettant d'explorer les tendances de dépenses au fil du temps et de comparer les dépenses entre catégories. Toutes les valeurs sont en dollars canadiens (CAD).",
     },
   };
 
